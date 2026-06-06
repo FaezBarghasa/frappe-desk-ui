@@ -1,0 +1,3 @@
+[application]
+name = "frappe-desk-ui"
+default_platform = "web"
