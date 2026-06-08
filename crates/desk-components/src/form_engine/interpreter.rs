@@ -1,5 +1,5 @@
+use crate::form_engine::fields::{CurrencyField, LinkField};
 use dioxus::prelude::*;
-use crate::form_engine::fields::{LinkField, CurrencyField};
 use rust_decimal::Decimal;
 
 #[derive(Clone, Debug, PartialEq)]

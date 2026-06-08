@@ -1,5 +1,5 @@
-use dioxus::prelude::*;
 use crate::state::DeskState;
+use dioxus::prelude::*;
 
 #[component]
 pub fn Sidebar() -> Element {
@@ -30,6 +30,8 @@ pub fn Sidebar() -> Element {
                             if !tabs.contains(&name.to_string()) {
                                 tabs.push(name.to_string());
                             }
+                            // Add routing logic here
+                            navigator().push(format!("/workspace/{}", name));
                         },
                         span { style: "font-size: 16px;", "{icon}" }
                         span { "{name}" }
