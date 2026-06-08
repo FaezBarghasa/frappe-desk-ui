@@ -1,6 +1,6 @@
-use dioxus::prelude::*;
 use desk_components::layout::navbar::Navbar;
 use desk_components::layout::sidebar::Sidebar;
+use dioxus::prelude::*;
 
 mod router;
 

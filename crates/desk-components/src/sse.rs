@@ -1,6 +1,6 @@
+use dioxus::prelude::*;
 use wasm_bindgen::prelude::*;
 use web_sys::{EventSource, MessageEvent};
-use dioxus::prelude::*;
 
 /// Establishes a connection to the Server-Sent Events endpoint and updates a Dioxus signal on data frames.
 ///
@@ -19,7 +19,7 @@ pub fn connect_event_stream(
     }) as Box<dyn FnMut(MessageEvent)>);
 
     es.set_onmessage(Some(onmessage_callback.as_ref().unchecked_ref()));
-    
+
     // Leak the closure memory intentionally so the browser continues invoking it asynchronously
     onmessage_callback.forget();
 

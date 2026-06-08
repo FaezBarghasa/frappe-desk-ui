@@ -1,5 +1,5 @@
-use dioxus::prelude::*;
 use crate::state::DeskState;
+use dioxus::prelude::*;
 
 #[component]
 pub fn Navbar() -> Element {
