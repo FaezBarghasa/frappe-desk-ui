@@ -120,3 +120,106 @@ pub fn CurrencyField(
         }
     }
 }
+
+#[derive(Clone, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+pub struct TableRow {
+    pub id: String,
+    pub cells: std::collections::HashMap<String, String>,
+}
+
+#[component]
+pub fn TableField(
+    label: String,
+    columns: Vec<String>,
+    mut rows: Signal<Vec<TableRow>>,
+    on_change: EventHandler<Vec<TableRow>>,
+) -> Element {
+    rsx! {
+        div { style: "display: flex; flex-direction: column; gap: 8px; width: 100%; border: 1px solid #44475a; border-radius: 8px; padding: 12px; background: #1e1f29;",
+            div { style: "display: flex; justify-content: space-between; align-items: center;",
+                label { style: "font-size: 13px; color: #f8f8f2; font-weight: 600;", "{label}" }
+                button {
+                    style: "background: #50fa7b; color: #282a36; border: none; padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer;",
+                    onclick: move |_| {
+                        let mut current_rows = rows.write();
+                        let mut cells = std::collections::HashMap::new();
+                        for col in &columns {
+                            cells.insert(col.clone(), "".to_string());
+                        }
+                        current_rows.push(TableRow {
+                            id: uuid::Uuid::new_v4().to_string(),
+                            cells,
+                        });
+                        on_change.call(current_rows.clone());
+                    },
+                    "+ Add Row"
+                }
+            }
+            div { style: "overflow-x: auto;",
+                table { style: "width: 100%; border-collapse: collapse; text-align: left;",
+                    thead {
+                        tr { style: "border-bottom: 2px solid #44475a;",
+                            for col in columns.iter() {
+                                th { style: "padding: 8px; font-size: 11px; color: #8f93a2; text-transform: uppercase;",
+                                    "{col}"
+                                }
+                            }
+                            th { style: "padding: 8px; width: 50px;" } // Action column
+                        }
+                    }
+                    tbody {
+                        for (idx, row) in rows().iter().enumerate() {
+                            {
+                                let row_id = row.id.clone();
+                                rsx! {
+                                    tr { style: "border-bottom: 1px solid #282a36;",
+                                        for col in columns.iter() {
+                                            {
+                                                let col_name = col.clone();
+                                                let cell_val = row.cells.get(&col_name).cloned().unwrap_or_default();
+                                                let row_id_inner = row_id.clone();
+                                                rsx! {
+                                                    td { style: "padding: 4px;",
+                                                        input {
+                                                            style: "background: transparent; border: 1px solid transparent; color: #f8f8f2; padding: 6px; width: 100%; font-size: 13px; outline: none; border-radius: 4px;",
+                                                            value: "{cell_val}",
+                                                            onfocus: move |evt| {
+                                                                // Highlight outline on focus
+                                                                let _ = evt;
+                                                            },
+                                                            oninput: move |evt| {
+                                                                let val = evt.value();
+                                                                let mut current_rows = rows.write();
+                                                                if let Some(r) = current_rows.iter_mut().find(|r| r.id == row_id_inner) {
+                                                                    r.cells.insert(col_name.clone(), val);
+                                                                }
+
+                                                                on_change.call(current_rows.clone());
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        td { style: "padding: 4px; text-align: center;",
+                                            button {
+                                                style: "background: #ff5555; color: #f8f8f2; border: none; padding: 4px 8px; border-radius: 4px; font-size: 10px; cursor: pointer;",
+                                                onclick: move |_| {
+                                                    let mut current_rows = rows.write();
+                                                    current_rows.remove(idx);
+                                                    on_change.call(current_rows.clone());
+                                                },
+                                                "Delete"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+

@@ -7,5 +7,7 @@ pub mod layout {
 pub mod form_engine {
     pub mod fields;
     pub mod interpreter;
+    pub mod list_view;
 }
+
 pub mod widgets;
