@@ -9,12 +9,12 @@
         ├── Cargo.toml
         ├── Dioxus.toml
         └── crates/
-            ├── desk-app/            # App shell entry and routing transitions
+            ├── desk-app/            # App shell entry, router setups, and site context
             │   └── src/
             │       ├── main.rs
             │       ├── state.rs
             │       └── router.rs
-            └── desk-components/     # Layout templates, fields, interpret renderer, and SSE
+            └── desk-components/     # Layout templates, fields, interpret renderer, widgets, and SSE
                 └── src/
                     ├── lib.rs
                     ├── state.rs
@@ -22,9 +22,14 @@
                     ├── layout/
                     │   ├── navbar.rs
                     │   └── sidebar.rs
+                    ├── widgets/
+                    │   ├── mod.rs
+                    │   ├── builder.rs
+                    │   └── dashboard.rs
                     └── form_engine/
                         ├── interpreter.rs
-                        └── fields.rs
+                        ├── fields.rs
+                        └── list_view.rs
     </directory_structure>
 
     <key_invariants>
@@ -32,7 +37,7 @@
             State uses modern signal primitives: active_site, current_user, open_tabs. Updates must mutate state reactively via Signal::set or Signal::write.
         </invariant>
         <invariant name="Dynamic Form Rendering">
-            FormInterpreter dynamically reads LocalDocTypeSchema rows, rendering autocomplete LinkFields and Decimal-formatted CurrencyFields asynchronously.
+            FormInterpreter dynamically reads LocalDocTypeSchema rows, rendering autocomplete LinkFields and Decimal-formatted CurrencyFields.
         </invariant>
         <invariant name="SSE Event Streams">
             The SSE listener runs ConnectEventStream, updating signals on incoming updates. Closures are explicitly forgotten to prevent browser garbage collection.

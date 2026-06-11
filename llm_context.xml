@@ -4,9 +4,9 @@
         <name>frappe-desk-ui</name>
         <description>Frontend desktop UI and components for the Rust ERPNext rewrite.</description>
     </project>
-    <architecture_notes>This workspace contains the frontend application and component library, likely utilizing Dioxus for web-based rendering and interactive form engines.</architecture_notes>
+    <architecture_notes>This workspace contains the frontend application and component library compiled to WASM. It utilizes Dioxus for web-based reactive rendering, dynamic form interpreters, ListViews, widgets, dashboard builders, and real-time SSE handlers.</architecture_notes>
     <coding_standards>
         <standard>No placeholder blocks or `todo!` stubs are permitted.</standard>
-        <standard>Utilize specific data typing.</standard>
+        <standard>Utilize specific data typing and Dioxus signal primitives for reactive state management.</standard>
     </coding_standards>
 </llm_context>
